@@ -1,0 +1,65 @@
+conky.config = {
+    alignment = 'top_right',
+    background = true,
+    border_width = 6,
+    default_color = '#FFFFFF',
+    color1 = '#F1F1F2',
+    color2 = '#FFFFFF',
+    color3 = '#EEEEEE',
+    double_buffer = true,
+    draw_borders = false,
+    draw_outline = false, -- amplifies text if yes
+    draw_shades = false,
+    font = 'Ubuntu Mono:normal:size=11',
+    gap_x = 10,
+    gap_y = 30,
+    maximum_width  = 450,
+    minimum_width  = 450,
+    no_buffers = true,
+
+    own_window = true,
+    own_window_type = "desktop",
+    own_window_transparent = false,
+    own_window_argb_visual = true,
+    own_window_argb_value = 255,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    draw_blended = false,
+
+    stippled_borders = 2,
+    update_interval = 1.0,
+    uppercase = false, -- set to yes if you want all text to be in uppercase
+    use_spacer = 'right',
+    use_xft = true,
+
+}
+
+conky.text = [[
+${color1}${font Sans:normal:size=9}SYSTEM ${hr 2}$color$font
+
+Total System: ${cpu cpu0}%
+${color2}${cpubar}$color
+${cpugraph FFFFFF FFFFFF}
+Core 1: ${if_match ${freq 1}<1000} ${endif}${freq 1} MHz        Temp: $color ${exec sensors|grep 'Core 0'|awk '{print $3}'}
+${if_match ${cpu cpu1}<10} ${endif}${cpu cpu1}%  ${color2}${cpubar cpu1}$color
+Core 2: ${if_match ${freq 2}<1000} ${endif}${freq 2} MHz        Temp: $color ${exec sensors|grep 'Core 1'|awk '{print $3}'}
+${if_match ${cpu cpu2}<10} ${endif}${cpu cpu2}%  ${color2}${cpubar cpu2}$color
+Core 3: ${if_match ${freq 3}<1000} ${endif}${freq 3} MHz
+${if_match ${cpu cpu3}<10} ${endif}${cpu cpu3}%  ${color2}${cpubar cpu3}$color
+Core 4: ${if_match ${freq 4}<1000} ${endif}${freq 4} MHz
+${if_match ${cpu cpu4}<10} ${endif}${cpu cpu4}%  ${color2}${cpubar cpu4}$color
+                                                                                   ${mem} #workaround for #960
+${color1}${font Sans:normal:size=9}MEMORY ${hr 2}$color$font
+RAM: ${mem} / ${memmax}
+${if_match $memperc<10} ${endif}$memperc%  ${color FFFFFF}${membar 6}$color
+
+${execpi 60 $HOME/.conky/disks.sh}
+
+Name${alignr}PID   CPU%   MEM%
+${color3}${top name 1} ${alignr}${top pid 1} ${top cpu 1} ${top mem 1}
+${color3}${top name 2} ${alignr}${top pid 2} ${top cpu 2} ${top mem 2}
+${color3}${top name 3} ${alignr}${top pid 3} ${top cpu 3} ${top mem 3}
+${color3}${top name 4} ${alignr}${top pid 4} ${top cpu 4} ${top mem 4}
+${color3}${top name 5} ${alignr}${top pid 5} ${top cpu 5} ${top mem 5}
+${color3}${top name 6} ${alignr}${top pid 6} ${top cpu 6} ${top mem 6}
+${color3}${top name 7} ${alignr}${top pid 7} ${top cpu 7} ${top mem 7}
+]];

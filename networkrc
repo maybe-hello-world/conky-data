@@ -1,0 +1,48 @@
+conky.config = {
+    alignment = 'top_right',
+    background = true,
+    border_width = 6,
+    default_color = '#FFFFFF',
+    color1 = '#F1F1F2',
+    color2 = '#FFFFFF',
+    color3 = '#EEEEEE',
+    double_buffer = true,
+    draw_borders = false,
+    draw_outline = false, -- amplifies text if yes
+    draw_shades = false,
+    font = 'Ubuntu Mono:normal:size=11',
+    gap_x = 10,
+    gap_y = 550,
+    maximum_width  = 450,
+    minimum_width  = 450,
+    no_buffers = true,
+
+    own_window = true,
+    own_window_type = "desktop",
+    own_window_transparent = false,
+    own_window_argb_visual = true,
+    own_window_argb_value = 255,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    draw_blended = false,
+
+    stippled_borders = 2,
+    update_interval = 1.0,
+    uppercase = false, -- set to yes if you want all text to be in uppercase
+    use_spacer = 'right',
+    use_xft = true,
+    lua_load = "$HOME/.conky/interface.lua",
+    template0 = [[${lua get_interface_name}]]
+
+}
+
+conky.text = [[
+${color1}${font Sans:bold:size=9}NETWORK ${hr 2}$color$font
+Interface name: ${template0}
+State:${alignr} ${eval $${if_existing /sys/class/net/${template0}/operstate up}$${color FFFFFF}ONLINE$${else}$${color red}OFFLINE$${endif}}$color ${eval $${addr ${template0}}}
+Public IP: ${alignr} ${execi 600 wget http://ipinfo.io/ip -qO -}
+ISP: ${alignr} ${execi 6000 curl ipinfo.io/org}
+Ping to 8.8.8.8: $alignr ${texeci 15 output=$(ping -c 10 8.8.8.8); avg=$(printf "%0.1f" `echo $output | awk -F '/' 'END {print $5}'` | sed 's/,/./'); mdev=$(printf "%0.1f" `echo $output | awk -F '/' 'END {print $7}' | sed 's/ .*//'` | sed 's/,/./'); echo $avg ± $mdev ms}
+Down: ${eval $${downspeed ${template0}}} / s ${alignr} Up: ${eval $${upspeed ${template0}}} / s
+${eval $${downspeedgraph ${template0} 20,220 ffffff ffffff}} ${alignr} ${eval $${upspeedgraph ${template0} 20,220 ffffff ffffff}}
+Total: ${eval $${totaldown ${template0}}} ${alignr}Total: ${eval $${totalup ${template0}}}
+]];
